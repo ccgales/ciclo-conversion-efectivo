@@ -1,0 +1,48 @@
+# ----------------------------------------------------------
+# Entornos virtuales (no se versionan; se recrean con requirements.txt)
+# ----------------------------------------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# ----------------------------------------------------------
+# Archivos compilados y caché de Python
+# ----------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+
+# ----------------------------------------------------------
+# Caché de herramientas de desarrollo y pruebas
+# ----------------------------------------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+
+# ----------------------------------------------------------
+# Variables de entorno y credenciales (nunca subir al repositorio)
+# ----------------------------------------------------------
+.env
+.env.*
+*.key
+*.pem
+
+# ----------------------------------------------------------
+# Archivos del sistema operativo
+# ----------------------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ----------------------------------------------------------
+# Configuración local de editores
+# ----------------------------------------------------------
+.vscode/
+.idea/
