@@ -21,6 +21,7 @@ ciclo_conversion/
 ├── app.py              # Interfaz Streamlit y gráfico Plotly
 ├── calculos.py         # Fórmula, rangos, clasificación y mensajes (sin dependencias de UI)
 ├── estilos.py          # Convención de colores y signos del proyecto
+├── graficos.py         # Gráficos Plotly (Funcionalidad 2: barras horizontales)
 ├── requirements.txt    # Dependencias
 └── documentos/         # Requerimientos funcionales
 ```
@@ -83,6 +84,35 @@ La aplicación se abre en `http://localhost:8501`.
 - Si el usuario borra el campo numérico, la aplicación conserva el último valor válido; los valores escritos fuera de rango se ajustan al mínimo o máximo permitido.
 - La lógica financiera está separada de la interfaz en `calculos.py`, para reutilizarla en las siguientes funcionalidades (gráfico horizontal, línea temporal, escenarios, etc.).
 
+## Funcionalidad 2: visualización gráfica dinámica del ciclo
+
+Debajo del bloque de resultado se muestra un gráfico de barras horizontales (Plotly) construido en `graficos.py`.
+
+| Código | Implementación |
+|--------|----------------|
+| RF-007 | Barras horizontales para CCE, Inventario (DIO), Cobro (DSO) y Pago (DPO). |
+| RF-008 | El gráfico se redibuja en cada cambio de slider o campo numérico, sin recargar la página. |
+| RF-009 | El largo de cada barra es proporcional a sus días; el eje se ajusta al mayor valor. |
+| RF-010 | Colores de la convención del proyecto: CCE azul, DIO verde, DSO naranja, DPO morado. |
+| RF-011 | Cada barra muestra solo el número de días, en texto blanco y centrado dentro de la barra. El nombre de cada barra se lee en el eje izquierdo (por ejemplo, `Inventario (DIO)`). |
+
+### Orden y disposición de las barras
+
+De arriba hacia abajo: **CCE, Inventario, Cobro y Pago**, con la disposición en cascada del diseño conceptual:
+
+```
+CCE                          ████ 26      <- inicia donde termina Pago y llega hasta donde termina Cobro
+Inventario  ███████████           54      <- inicia en 0
+Cobro                  ██████████ 38      <- inicia donde termina Inventario
+Pago        █████████████████     66      <- inicia en 0
+```
+
+Con esta disposición se ve cómo interactúan los componentes: el CCE es el tramo del ciclo operativo (DIO + DSO) que el plazo de pago (DPO) no alcanza a cubrir. Unas líneas guía punteadas marcan dónde empieza y termina cada tramo.
+
+Notas:
+- Si el CCE es negativo (DPO mayor que DIO + DSO), la barra azul ocupa el tramo entre ambos extremos y su etiqueta muestra el valor con signo (por ejemplo, `-108 días`).
+- Si una barra es demasiado corta para contener el número (valores muy pequeños o cero), el número se coloca justo a la derecha de la barra en color oscuro, porque el texto blanco no se vería sobre el fondo claro.
+
 ## Alcance
 
-Este entregable incluye únicamente la Funcionalidad 1. Las funcionalidades 2 a 7 del documento (gráfico de barras, línea temporal, indicadores, escenarios, recomendador y dashboard) quedan fuera de esta versión.
+Este entregable incluye las Funcionalidades 1 y 2. Las funcionalidades 3 a 7 del documento (línea temporal, indicadores, escenarios, recomendador y dashboard) quedan fuera de esta versión.

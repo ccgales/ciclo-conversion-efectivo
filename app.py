@@ -15,6 +15,7 @@ from calculos import (
     todos_los_escenarios,
 )
 from estilos import CONVENCION, color, css_controles, signo
+from graficos import crear_grafico_barras
 
 st.set_page_config(
     page_title="Simulador del Ciclo de Conversión de Efectivo",
@@ -222,6 +223,25 @@ for columna, (componente, valor) in zip(
     bloques, [("DIO", dio), ("DSO", dso), ("DPO", dpo), ("CCE", cce)]
 ):
     columna.html(bloque_resultado(componente, valor))
+
+# ---------------------------------------------------------------------------
+# Funcionalidad 2 (RF-007 a RF-011): gráfico de barras horizontales.
+# Se redibuja en cada interacción, por lo que se actualiza en tiempo real
+# (RF-008) sin recargar la página.
+# ---------------------------------------------------------------------------
+st.subheader("Visualización gráfica del ciclo")
+st.caption(
+    "El cobro inicia donde termina el inventario y el CCE ocupa el tramo del "
+    "ciclo operativo (DIO + DSO) que el plazo de pago (DPO) no alcanza a cubrir."
+)
+st.plotly_chart(
+    crear_grafico_barras(dio, dso, dpo, cce),
+    key="grafico_barras",
+    alt=(
+        f"Gráfico de barras horizontales: ciclo de conversión de efectivo {cce:,.0f} días, "
+        f"inventario {dio:,} días, cobro {dso:,} días y pago {dpo:,} días."
+    ),
+)
 
 # Leyenda de rangos (referencia de RF-006)
 with st.expander("Ver leyenda de rangos y colores"):
